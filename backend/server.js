@@ -2,14 +2,16 @@ const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
+
 const employeeRoutes =
 require("./routes/employeeRoutes");
+
 const app = express();
 
 connectDB();
 
 app.use(cors());
-app.use("/api/employees", employeeRoutes);
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
