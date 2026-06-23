@@ -14,9 +14,7 @@ try{
 const employees =
 await Employee.find();
 
-res.json(
-employees
-);
+res.json(employees);
 
 }
 
@@ -24,8 +22,7 @@ catch(error){
 
 res.status(500)
 .json({
-message:
-error.message
+message:error.message
 });
 
 }
@@ -34,25 +31,22 @@ error.message
 
 router.post(
 "/add",
+
 async(req,res)=>{
 
 try{
 
 const employee =
-new Employee(
-req.body
-);
+new Employee(req.body);
 
 await employee.save();
 
 res.status(201)
 .json({
 
-message:
-"Employee Added",
+message:"Employee Added",
 
-data:
-employee
+data:employee
 
 });
 
@@ -62,10 +56,7 @@ catch(error){
 
 res.status(500)
 .json({
-
-message:
-error.message
-
+message:error.message
 });
 
 }
@@ -84,8 +75,7 @@ req.params.id
 );
 
 res.json({
-message:
-"Employee Deleted"
+message:"Employee Deleted"
 });
 
 }
@@ -94,8 +84,50 @@ catch(error){
 
 res.status(500)
 .json({
+message:error.message
+});
+
+}
+
+});
+
+router.put(
+"/update/:id",
+
+async(req,res)=>{
+
+try{
+
+const employee =
+await Employee.findByIdAndUpdate(
+
+req.params.id,
+
+req.body,
+
+{
+new:true
+}
+
+);
+
+res.json({
+
 message:
-error.message
+"Employee Updated",
+
+data:
+employee
+
+});
+
+}
+
+catch(error){
+
+res.status(500)
+.json({
+message:error.message
 });
 
 }
