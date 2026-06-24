@@ -1,9 +1,7 @@
+import EmployeeList from "./components/EmployeeList";
+
 function App() {
-  return (
-    <div>
-      <h1>ERP Management System</h1>
-    </div>
-  );
+  return <EmployeeList />;
 }
 
 export default App;
