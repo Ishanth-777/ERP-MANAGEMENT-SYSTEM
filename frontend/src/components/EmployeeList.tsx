@@ -52,6 +52,16 @@ function EmployeeList() {
     fetchEmployees();
   };
 
+  const deleteEmployee = async (id: string) => {
+
+    await axios.delete(
+      `http://localhost:5000/api/employees/delete/${id}`
+    );
+
+    fetchEmployees();
+
+  };
+
   return (
 
     <div>
@@ -111,6 +121,12 @@ function EmployeeList() {
           <p>{emp.department}</p>
 
           <p>₹{emp.salary}</p>
+
+          <button
+            onClick={() => deleteEmployee(emp._id)}
+          >
+            Delete
+          </button>
 
           <hr />
 
