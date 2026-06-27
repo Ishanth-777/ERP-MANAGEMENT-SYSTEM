@@ -3,73 +3,125 @@ import axios from "axios";
 
 function EmployeeList() {
 
-const [employees,
-setEmployees] =
-useState([]);
+  const [employees, setEmployees] = useState<any[]>([]);
 
-useEffect(()=>{
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    department: "",
+    salary: ""
+  });
 
-axios
-.get(
-"http://localhost:5000/api/employees"
-)
+  const fetchEmployees = () => {
+    axios
+      .get("http://localhost:5000/api/employees")
+      .then((res) => {
+        setEmployees(res.data);
+      })
+      .catch(console.log);
+  };
 
-.then((res)=>{
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
 
-setEmployees(
-res.data
-);
+  const handleChange = (e: any) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
 
-})
+  const addEmployee = async () => {
 
-.catch(
-console.log
-);
+    await axios.post(
+      "http://localhost:5000/api/employees/add",
+      {
+        ...form,
+        salary: Number(form.salary)
+      }
+    );
 
-},[]);
+    setForm({
+      name: "",
+      email: "",
+      department: "",
+      salary: ""
+    });
 
-return(
+    fetchEmployees();
+  };
 
-<div>
+  return (
 
-<h1>
-Employees
-</h1>
+    <div>
 
-{
+      <h1>Employees</h1>
 
-employees.map(
-(emp:any)=>(
+      <input
+        name="name"
+        placeholder="Name"
+        value={form.name}
+        onChange={handleChange}
+      />
 
-<div
-key=
-{emp._id}
->
+      <br /><br />
 
-<p>
-{emp.name}
-</p>
+      <input
+        name="email"
+        placeholder="Email"
+        value={form.email}
+        onChange={handleChange}
+      />
 
-<p>
-₹
-{emp.salary}
-</p>
+      <br /><br />
 
-<hr/>
+      <input
+        name="department"
+        placeholder="Department"
+        value={form.department}
+        onChange={handleChange}
+      />
 
-</div>
+      <br /><br />
 
-)
+      <input
+        name="salary"
+        placeholder="Salary"
+        value={form.salary}
+        onChange={handleChange}
+      />
 
-)
+      <br /><br />
+
+      <button onClick={addEmployee}>
+        Add Employee
+      </button>
+
+      <hr />
+
+      {employees.map((emp: any) => (
+
+        <div key={emp._id}>
+
+          <h3>{emp.name}</h3>
+
+          <p>{emp.email}</p>
+
+          <p>{emp.department}</p>
+
+          <p>₹{emp.salary}</p>
+
+          <hr />
+
+        </div>
+
+      ))}
+
+    </div>
+
+  );
 
 }
 
-</div>
-
-);
-
-}
-
-export default
-EmployeeList;
+export default EmployeeList;
