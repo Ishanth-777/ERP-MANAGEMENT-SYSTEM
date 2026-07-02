@@ -1,7 +1,7 @@
-import EmployeeList from "./components/EmployeeList";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  return <EmployeeList />;
+  return <Dashboard />;
 }
 
 export default App;
