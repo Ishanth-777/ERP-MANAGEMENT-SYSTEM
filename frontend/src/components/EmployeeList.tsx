@@ -12,6 +12,8 @@ function EmployeeList() {
     salary: ""
   });
 
+  const [editId, setEditId] = useState("");
+
   const fetchEmployees = () => {
     axios
       .get("http://localhost:5000/api/employees")
@@ -34,13 +36,29 @@ function EmployeeList() {
 
   const addEmployee = async () => {
 
-    await axios.post(
-      "http://localhost:5000/api/employees/add",
-      {
-        ...form,
-        salary: Number(form.salary)
-      }
-    );
+    if (editId) {
+
+      await axios.put(
+        `http://localhost:5000/api/employees/update/${editId}`,
+        {
+          ...form,
+          salary: Number(form.salary)
+        }
+      );
+
+      setEditId("");
+
+    } else {
+
+      await axios.post(
+        "http://localhost:5000/api/employees/add",
+        {
+          ...form,
+          salary: Number(form.salary)
+        }
+      );
+
+    }
 
     setForm({
       name: "",
@@ -59,6 +77,18 @@ function EmployeeList() {
     );
 
     fetchEmployees();
+  };
+
+  const editEmployee = (emp: any) => {
+
+    setEditId(emp._id);
+
+    setForm({
+      name: emp.name,
+      email: emp.email,
+      department: emp.department,
+      salary: emp.salary.toString()
+    });
 
   };
 
@@ -105,7 +135,7 @@ function EmployeeList() {
       <br /><br />
 
       <button onClick={addEmployee}>
-        Add Employee
+        {editId ? "Update Employee" : "Add Employee"}
       </button>
 
       <hr />
@@ -121,6 +151,14 @@ function EmployeeList() {
           <p>{emp.department}</p>
 
           <p>₹{emp.salary}</p>
+
+          <button
+            onClick={() => editEmployee(emp)}
+          >
+            Edit
+          </button>
+
+          {" "}
 
           <button
             onClick={() => deleteEmployee(emp._id)}
